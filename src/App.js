@@ -212,7 +212,7 @@ function App() {
                   onClick={handleStartMachine}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
-                  🚀 Start Machine
+                  ðŸš€ Start Machine
                 </button>
                 
                 {setupError && (
@@ -303,13 +303,13 @@ function App() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              🔍 {examType}-Focused Testbook MCQ Extractor
+              ðŸ“š {examType}-Focused Testbook MCQ Extractor
             </h1>
             <p className="text-gray-600 mb-2">
               Extract {examType}-relevant MCQs with Smart Topic Filtering from Testbook
             </p>
             <p className="text-sm text-blue-600 font-medium">
-              ✨ Now with Smart Filtering: Only extracts MCQs where your topic appears in the question body!
+              âœ¨ Now with Smart Filtering: Only extracts MCQs where your topic appears in the question body!
             </p>
           </div>
 
@@ -379,7 +379,7 @@ function App() {
                     type="submit"
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   >
-                    🚀 Generate {examType} MCQ PDF ({pdfFormat === 'text' ? 'Text' : 'Image'} Format)
+                    ðŸš€ Generate {examType} MCQ PDF ({pdfFormat === 'text' ? 'Text' : 'Image'} Format)
                   </button>
                 </form>
               ) : (
@@ -434,7 +434,7 @@ function App() {
           {/* Results */}
           {jobStatus && jobStatus.status === 'completed' && (
             <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">📄 PDF Generated Successfully!</h3>
+              <h3 className="text-lg font-semibold text-green-800 mb-2">ðŸ“„ PDF Generated Successfully!</h3>
               <p className="text-green-700 text-sm mb-2">
                 Found {jobStatus.mcqs_found} {examType} MCQs related to "{topic}"
               </p>
@@ -446,13 +446,13 @@ function App() {
                   onClick={handleDownload}
                   className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                 >
-                  📥 Download PDF
+                  ðŸ“¥ Download PDF
                 </button>
                 <button
                   onClick={resetForm}
                   className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                 >
-                  🔄 Extract Another Topic
+                  ðŸ”„ Extract Another Topic
                 </button>
               </div>
             </div>
@@ -460,13 +460,13 @@ function App() {
           
           {jobStatus && jobStatus.status === 'error' && (
             <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-red-800 mb-2">❌ Error Occurred</h3>
+              <h3 className="text-lg font-semibold text-red-800 mb-2">âš ï¸ Error Occurred</h3>
               <p className="text-red-700 text-sm mb-4">{jobStatus.progress}</p>
               <button
                 onClick={resetForm}
                 className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
               >
-                🔄 Try Again
+                ðŸ”„ Try Again
               </button>
             </div>
           )}
@@ -475,7 +475,7 @@ function App() {
       
       {/* Information Card */}
       <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-lg font-semibold text-blue-800 mb-2">ℹ️ Format Information</h3>
+        <h3 className="text-lg font-semibold text-blue-800 mb-2">â„¹ï¸ Format Information</h3>
         <div className="space-y-2 text-sm">
           <div>
             <span className="font-medium text-blue-700">Text Format:</span>
