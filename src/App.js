@@ -1,6 +1,7 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css';
+import './App.css'; // Your existing custom styles
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
@@ -91,20 +92,23 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              {examType}-Focused Testbook MCQ Extractor
+          {/* New Header Section: Study Smarter, not Harder */}
+          <div className="text-center p-4 mb-8">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-gray-800 mb-6 leading-tight">
+              🧠 Study Smarter, <br className="md:hidden"/>not Harder
             </h1>
-            <p className="text-gray-600 mb-2">
-              Extract {examType}-relevant MCQs with Smart Topic Filtering from Testbook
-            </p>
-            <p className="text-sm text-blue-600 font-medium">
-              Now with Smart Filtering: Only extracts MCQs Relevant to your topic!
-            </p>
+
+            {/* Box for "Made By HEMANT SINGH" with animated border */}
+            {/* The 'animated-magic-border' class from index.css applies the continuous color change */}
+            <div className="inline-block px-6 py-3 rounded-xl shadow-lg bg-white bg-opacity-90 transition-all duration-300 transform hover:scale-105
+                            animated-magic-border">
+              <p className="text-xl md:text-2xl font-semibold text-gray-700 select-none">
+                Made By HEMANT SINGH
+              </p>
+            </div>
           </div>
 
-          {/* Main Card */}
+          {/* Main Card - Your existing form and status display */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
               <h2 className="text-xl font-semibold text-white">Extract MCQs by Topic</h2>
@@ -170,7 +174,7 @@ function App() {
                     type="submit"
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   >
-                    ðŸš€ Generate {examType} MCQ PDF ({pdfFormat === 'text' ? 'Text' : 'Image'} Format)
+                    🚀 Generate {examType} MCQ PDF ({pdfFormat === 'text' ? 'Text' : 'Image'} Format)
                   </button>
                 </form>
               ) : (
@@ -225,7 +229,7 @@ function App() {
           {/* Results */}
           {jobStatus && jobStatus.status === 'completed' && (
             <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">✅„ PDF Generated Successfully!</h3>
+              <h3 className="text-lg font-semibold text-green-800 mb-2">✅ PDF Generated Successfully!</h3>
               <p className="text-green-700 text-sm mb-2">
                 Found {jobStatus.mcqs_found} {examType} MCQs related to "{topic}"
               </p>
@@ -237,13 +241,13 @@ function App() {
                   onClick={handleDownload}
                   className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                 >
-                  ðŸ“¥ Download PDF
+                  📄 Download PDF
                 </button>
                 <button
                   onClick={resetForm}
                   className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                 >
-                  ðŸ”„ Extract Another Topic
+                  🔄 Extract Another Topic
                 </button>
               </div>
             </div>
@@ -251,13 +255,13 @@ function App() {
           
           {jobStatus && jobStatus.status === 'error' && (
             <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-red-800 mb-2">âš ï¸ Error Occurred</h3>
+              <h3 className="text-lg font-semibold text-red-800 mb-2">⚠️ Error Occurred</h3>
               <p className="text-red-700 text-sm mb-4">{jobStatus.progress}</p>
               <button
                 onClick={resetForm}
                 className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
               >
-                ðŸ”„ Try Again
+                🔄 Try Again
               </button>
             </div>
           )}
@@ -267,19 +271,21 @@ function App() {
       {/* Information Card */}
       <div className="container mx-auto px-4 pb-8">
         <div className="max-w-2xl mx-auto">
-          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-blue-800 mb-2">â„¹ï¸ Format Information</h3>
-            <div className="space-y-2 text-sm">
-              <div>
-                <span className="font-medium text-blue-700">Text Format:</span>
+          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-md">
+            <h3 className="text-xl font-bold text-blue-800 mb-4 flex items-center">
+              <span className="mr-2 text-2xl">ℹ️</span> Format Information
+            </h3>
+            <div className="space-y-3 text-base text-gray-700">
+              <div className="flex items-center">
+                <span className="font-medium text-blue-700 w-32 flex-shrink-0">Text Format:</span>
                 <span className="text-blue-600 ml-2">Traditional PDF with extracted text, questions, and answers</span>
               </div>
-              <div>
-                <span className="font-medium text-blue-700">Image Format:</span>
+              <div className="flex items-center">
+                <span className="font-medium text-blue-700 w-32 flex-shrink-0">Image Format:</span>
                 <span className="text-blue-600 ml-2">Screenshots of actual Testbook pages showing MCQs with original formatting</span>
               </div>
-              <div>
-                <span className="font-medium text-blue-700">Exam Types:</span>
+              <div className="flex items-center">
+                <span className="font-medium text-blue-700 w-32 flex-shrink-0">Exam Types:</span>
                 <span className="text-blue-600 ml-2">SSC (Staff Selection Commission) and BPSC (Bihar Public Service Commission)</span>
               </div>
             </div>
