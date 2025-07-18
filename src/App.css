@@ -1,6 +1,4 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+/* src/App.css */
 
 /* Custom styles for smooth animations */
 .fade-in {
