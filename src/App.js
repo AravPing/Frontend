@@ -94,13 +94,13 @@ function App() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              ðŸ“š {examType}-Focused Testbook MCQ Extractor
+              {examType}-Focused Testbook MCQ Extractor
             </h1>
             <p className="text-gray-600 mb-2">
               Extract {examType}-relevant MCQs with Smart Topic Filtering from Testbook
             </p>
             <p className="text-sm text-blue-600 font-medium">
-              âœ¨ Now with Smart Filtering: Only extracts MCQs where your topic appears in the question body!
+              Now with Smart Filtering: Only extracts MCQs Relevant to your topic!
             </p>
           </div>
 
@@ -225,7 +225,7 @@ function App() {
           {/* Results */}
           {jobStatus && jobStatus.status === 'completed' && (
             <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">ðŸ“„ PDF Generated Successfully!</h3>
+              <h3 className="text-lg font-semibold text-green-800 mb-2">✅„ PDF Generated Successfully!</h3>
               <p className="text-green-700 text-sm mb-2">
                 Found {jobStatus.mcqs_found} {examType} MCQs related to "{topic}"
               </p>
