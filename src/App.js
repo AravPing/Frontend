@@ -92,20 +92,17 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* New Header Section: Study Smarter, not Harder */}
-          <div className="text-center p-4 mb-8">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-gray-800 mb-6 leading-tight">
-              🧠 Study Smarter, <br className="md:hidden"/>not Harder
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              {examType}-Focused Testbook MCQ Extractor
             </h1>
-
-            {/* Box for "Made By HEMANT SINGH" with animated border */}
-            {/* The 'animated-magic-border' class from index.css applies the continuous color change */}
-            <div className="inline-block px-6 py-3 rounded-xl shadow-lg bg-white bg-opacity-90 transition-all duration-300 transform hover:scale-105
-                            animated-magic-border">
-              <p className="text-xl md:text-2xl font-semibold text-gray-700 select-none">
-                Made By HEMANT SINGH
-              </p>
-            </div>
+            <p className="text-gray-600 mb-2">
+              Extract {examType}-relevant MCQs with Smart Topic Filtering from Testbook
+            </p>
+            <p className="text-sm text-blue-600 font-medium">
+              Now with Smart Filtering: Only extracts MCQs Relevant to your topic!
+            </p>
           </div>
 
           {/* Main Card - Your existing form and status display */}
@@ -268,26 +265,15 @@ function App() {
         </div>
       </div>
       
-      {/* Information Card */}
-      <div className="container mx-auto px-4 pb-8">
+      {/* Moved and Resized: "Study Smarter, not Harder" and "Made By HEMANT SINGH" */}
+      <div className="container mx-auto px-4 pb-8 mt-6">
         <div className="max-w-2xl mx-auto">
-          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-md">
-            <h3 className="text-xl font-bold text-blue-800 mb-4 flex items-center">
-              <span className="mr-2 text-2xl">ℹ️</span> Format Information
-            </h3>
-            <div className="space-y-3 text-base text-gray-700">
-              <div className="flex items-center">
-                <span className="font-medium text-blue-700 w-32 flex-shrink-0">Text Format:</span>
-                <span className="text-blue-600 ml-2">Traditional PDF with extracted text, questions, and answers</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-blue-700 w-32 flex-shrink-0">Image Format:</span>
-                <span className="text-blue-600 ml-2">Screenshots of actual Testbook pages showing MCQs with original formatting</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-blue-700 w-32 flex-shrink-0">Exam Types:</span>
-                <span className="text-blue-600 ml-2">SSC (Staff Selection Commission) and BPSC (Bihar Public Service Commission)</span>
-              </div>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center shadow-md">
+            <h3 className="text-2xl font-bold text-blue-800 mb-2">🧠 Study Smarter, not Harder</h3>
+            <div className="inline-block px-4 py-2 rounded-lg shadow-sm bg-white bg-opacity-90 animated-magic-border">
+              <p className="text-base font-semibold text-gray-700 select-none">
+                Made By HEMANT SINGH
+              </p>
             </div>
           </div>
         </div>
