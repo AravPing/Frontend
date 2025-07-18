@@ -5,13 +5,6 @@ import './App.css';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 function App() {
-  // Setup state
-  const [isSetupComplete, setIsSetupComplete] = useState(false);
-  const [isSetupInProgress, setIsSetupInProgress] = useState(false);
-  const [setupId, setSetupId] = useState(null);
-  const [setupStatus, setSetupStatus] = useState(null);
-  const [setupError, setSetupError] = useState('');
-
   // Main app state
   const [topic, setTopic] = useState('');
   const [examType, setExamType] = useState('SSC');
@@ -21,42 +14,7 @@ function App() {
   const [jobStatus, setJobStatus] = useState(null);
   const [error, setError] = useState('');
 
-  // Check initial setup status on load
-  useEffect(() => {
-    checkSetupStatus();
-  }, []);
-
-  // Poll setup status
-  useEffect(() => {
-    if (!setupId || !isSetupInProgress) return;
-
-    const interval = setInterval(async () => {
-      try {
-        const response = await axios.get(`${BACKEND_URL}/api/setup-status/${setupId}`);
-        setSetupStatus(response.data);
-
-        if (response.data.status === 'completed') {
-          setIsSetupComplete(true);
-          setIsSetupInProgress(false);
-          setSetupError('');
-          clearInterval(interval);
-        } else if (response.data.status === 'error') {
-          setIsSetupInProgress(false);
-          setSetupError(response.data.error_message || 'Setup failed');
-          clearInterval(interval);
-        }
-      } catch (err) {
-        console.error('Error fetching setup status:', err);
-        setSetupError('Failed to fetch setup status');
-        setIsSetupInProgress(false);
-        clearInterval(interval);
-      }
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [setupId, isSetupInProgress]);
-
-  // Poll job status (existing functionality)
+  // Poll job status
   useEffect(() => {
     if (!jobId || !isGenerating) return;
 
@@ -79,60 +37,6 @@ function App() {
 
     return () => clearInterval(interval);
   }, [jobId, isGenerating]);
-
-  const checkSetupStatus = async () => {
-    try {
-      const response = await axios.get(`${BACKEND_URL}/api/setup-status`);
-      setIsSetupComplete(response.data.is_setup_complete);
-      setIsSetupInProgress(response.data.setup_in_progress);
-      if (response.data.setup_error) {
-        setSetupError(response.data.setup_error);
-      }
-    } catch (err) {
-      console.error('Error checking setup status:', err);
-    }
-  };
-
-  const handleStartMachine = async () => {
-    try {
-      setSetupError('');
-      setSetupStatus(null);
-      
-      const response = await axios.post(`${BACKEND_URL}/api/setup`);
-      
-      if (response.data.status === 'started') {
-        setSetupId(response.data.setup_id);
-        setIsSetupInProgress(true);
-        setSetupStatus({
-          setup_id: response.data.setup_id,
-          status: 'running',
-          progress: 'Setup started...',
-          step: 'initialization'
-        });
-      } else if (response.data.status === 'running') {
-        setSetupError('Setup is already in progress');
-      }
-    } catch (err) {
-      console.error('Error starting setup:', err);
-      setSetupError(err.response?.data?.detail || 'Failed to start setup');
-    }
-  };
-
-  const handleRetrySetup = async () => {
-    try {
-      setSetupError('');
-      setSetupStatus(null);
-      
-      // First force reset the setup state
-      await axios.post(`${BACKEND_URL}/api/setup/force-reset`);
-      
-      // Then start fresh setup
-      await handleStartMachine();
-    } catch (err) {
-      console.error('Error retrying setup:', err);
-      setSetupError(err.response?.data?.detail || 'Failed to retry setup');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -183,123 +87,10 @@ function App() {
     return Math.round((jobStatus.processed_links / jobStatus.total_links) * 100);
   };
 
-  // Setup UI - shown when setup is not complete
-  if (!isSetupComplete) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-        <div className="max-w-2xl mx-auto px-4">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
-            <div className="mb-6">
-              <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Backend Setup Required
-              </h1>
-              <p className="text-gray-600 mb-4">
-                The application needs to initialize its backend dependencies before you can start extracting MCQs.
-              </p>
-              <p className="text-sm text-blue-600 font-medium">
-                This process installs Playwright browsers and configures the scraping engine.
-              </p>
-            </div>
-
-            {!isSetupInProgress ? (
-              <div>
-                <button
-                  onClick={handleStartMachine}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                >
-                  ðŸš€ Start Machine
-                </button>
-                
-                {setupError && (
-                  <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-red-800 font-medium">Setup Error:</p>
-                    <p className="text-red-600 text-sm mt-1">{setupError}</p>
-                    <button
-                      onClick={handleRetrySetup}
-                      className="mt-3 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded text-sm transition-colors duration-200"
-                    >
-                      Retry Setup
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
-                  <span className="text-lg font-medium text-gray-700">Starting Machine...</span>
-                </div>
-                
-                {setupStatus && (
-                  <div className="bg-gray-50 rounded-lg p-4 text-left">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-600">Status:</span>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        setupStatus.status === 'running' 
-                          ? 'bg-blue-100 text-blue-800' 
-                          : setupStatus.status === 'completed'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {setupStatus.status}
-                      </span>
-                    </div>
-                    
-                    <div className="text-sm text-gray-700 mb-2">
-                      <strong>Progress:</strong> {setupStatus.progress}
-                    </div>
-                    
-                    {setupStatus.step && (
-                      <div className="text-sm text-gray-600">
-                        <strong>Step:</strong> {setupStatus.step}
-                      </div>
-                    )}
-                    
-                    {setupStatus.status === 'running' && (
-                      <div className="mt-3">
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-500 animate-pulse"
-                            style={{ width: '60%' }}
-                          ></div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Main Application UI - shown after setup is complete
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* Success message */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-green-800 font-medium">Machine is ready!</p>
-                <p className="text-green-600 text-sm">Please enter your topic and enjoy the app.</p>
-              </div>
-            </div>
-          </div>
-
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
@@ -474,20 +265,24 @@ function App() {
       </div>
       
       {/* Information Card */}
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-lg font-semibold text-blue-800 mb-2">â„¹ï¸ Format Information</h3>
-        <div className="space-y-2 text-sm">
-          <div>
-            <span className="font-medium text-blue-700">Text Format:</span>
-            <span className="text-blue-600 ml-2">Traditional PDF with extracted text, questions, and answers</span>
-          </div>
-          <div>
-            <span className="font-medium text-blue-700">Image Format:</span>
-            <span className="text-blue-600 ml-2">Screenshots of actual Testbook pages showing MCQs with original formatting</span>
-          </div>
-          <div>
-            <span className="font-medium text-blue-700">Exam Types:</span>
-            <span className="text-blue-600 ml-2">SSC (Staff Selection Commission) and BPSC (Bihar Public Service Commission)</span>
+      <div className="container mx-auto px-4 pb-8">
+        <div className="max-w-2xl mx-auto">
+          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-blue-800 mb-2">â„¹ï¸ Format Information</h3>
+            <div className="space-y-2 text-sm">
+              <div>
+                <span className="font-medium text-blue-700">Text Format:</span>
+                <span className="text-blue-600 ml-2">Traditional PDF with extracted text, questions, and answers</span>
+              </div>
+              <div>
+                <span className="font-medium text-blue-700">Image Format:</span>
+                <span className="text-blue-600 ml-2">Screenshots of actual Testbook pages showing MCQs with original formatting</span>
+              </div>
+              <div>
+                <span className="font-medium text-blue-700">Exam Types:</span>
+                <span className="text-blue-600 ml-2">SSC (Staff Selection Commission) and BPSC (Bihar Public Service Commission)</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
